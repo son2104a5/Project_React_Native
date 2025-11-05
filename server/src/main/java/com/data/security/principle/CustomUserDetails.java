@@ -33,7 +33,7 @@ public class CustomUserDetails implements UserDetails {
 
     public User getUser() {
         return User.builder()
-                .password(password)
+                .passwordHash(password)
                 .fullName(fullName)
                 .email(email)
                 .phone(phone)
@@ -47,7 +47,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override

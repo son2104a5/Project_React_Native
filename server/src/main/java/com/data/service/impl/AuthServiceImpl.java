@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
 //        LocalDateTime otpExpiration = LocalDateTime.now().plusMinutes(5);
 
         User user = User.builder()
-                .password(passwordEncoder.encode(registerRequestDTO.getPassword()))
+                .passwordHash(passwordEncoder.encode(registerRequestDTO.getPassword()))
                 .email(registerRequestDTO.getEmail())
                 .phone(registerRequestDTO.getPhone())
                 .fullName(registerRequestDTO.getFullName())
@@ -72,7 +72,7 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         CustomUserDetails userDetails = CustomUserDetails.builder()
-                .password(user.getPassword())
+                .password(user.getPasswordHash())
                 .fullName(user.getFullName())
                 .email(user.getEmail())
                 .phone(user.getPhone())
@@ -83,16 +83,17 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
 
         // Tạo token JWT
-        String token = jwtUtils.generateToken(userDetails.getUsername());
+        String accessToken = jwtUtils.generateToken(userDetails.getUsername());
+        String refreshToken = jwtUtils.refreshToken(accessToken, userDetails.getUsername());
 
         return JWTResponse.builder()
-                .username(userDetails.getUsername())
                 .fullName(userDetails.getFullName())
                 .email(userDetails.getEmail())
                 .phone(userDetails.getPhone())
                 .enabled(userDetails.isEnabled())
                 .authorities(userDetails.getAuthorities())
-                .token(token)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -117,7 +118,7 @@ public class AuthServiceImpl implements AuthService {
             }
 
             CustomUserDetails userDetails = CustomUserDetails.builder()
-                    .password(user.getPassword())
+                    .password(user.getPasswordHash())
                     .fullName(user.getFullName())
                     .email(user.getEmail())
                     .phone(user.getPhone())
@@ -128,13 +129,12 @@ public class AuthServiceImpl implements AuthService {
             String token = jwtUtils.generateToken(userDetails.getUsername());
 
             return JWTResponse.builder()
-                    .username(userDetails.getUsername())
                     .fullName(userDetails.getFullName())
                     .email(userDetails.getEmail())
                     .phone(userDetails.getPhone())
                     .enabled(userDetails.isEnabled())
                     .authorities(userDetails.getAuthorities())
-                    .token(token)
+                    .accessToken(token)
                     .build();
         } catch (BadCredentialsException e) {
             log.error("Sai email hoặc mật khẩu: {}", loginRequestDTO.getEmail(), e);

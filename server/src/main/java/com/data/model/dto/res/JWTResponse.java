@@ -14,11 +14,11 @@ import java.util.Collection;
 @NoArgsConstructor
 @Builder
 public class JWTResponse {
-    private String username;
     private String fullName;
     private String email;
     private String phone;
     private Boolean enabled;
     private Collection<? extends GrantedAuthority> authorities;
-    private String token;
+    private String accessToken;
+    private String refreshToken;
 }

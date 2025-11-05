@@ -42,11 +42,11 @@ public class JwtUtils {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public String refreshToken(String token, String username) {
-        if (validateToken(token) && getEmailFromToken(token).equals(username)) {
+    public String refreshToken(String token, String email) {
+        if (validateToken(token) && getEmailFromToken(token).equals(email)) {
             Date now = new Date();
             return Jwts.builder()
-                    .setSubject(username)
+                    .setSubject(email)
                     .setIssuedAt(now)
                     .setExpiration(new Date(now.getTime() + jwtRefresh))
                     .signWith(SignatureAlgorithm.HS512, jwtSecret)
