@@ -68,6 +68,7 @@ public class AuthServiceImpl implements AuthService {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(null)
                 .status(UserStatus.ACTIVE)
+                .dateOfBirth(registerRequestDTO.getDateOfBirth())
                 .role(roleRepository.findByRoleName(UserRole.USER))
                 .build();
 

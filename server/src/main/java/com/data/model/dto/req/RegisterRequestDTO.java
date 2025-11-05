@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,4 +21,5 @@ public class RegisterRequestDTO {
     private String phone;
     @NotBlank(message = "Hãy viết tên đầy đủ của bạn")
     private String fullName;
+    private LocalDate dateOfBirth;
 }

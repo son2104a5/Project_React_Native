@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function index() {
   const router = useRouter();
   const handleLogin = () => {
-    router.push('/auth/login');
+    router.push('/(auth)/login');
   }
   return (
     <SafeAreaView>
