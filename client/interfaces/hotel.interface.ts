@@ -12,6 +12,9 @@ export interface Hotel {
   city: string;
   country: string;
   starRating?: number;
+  image: string[];
+  reviews: number;
+  price: number;
   owner: {
     id: number;
     fullName: string;
@@ -19,4 +22,10 @@ export interface Hotel {
   };
   status: HotelStatus;
   createdAt: string;
+}
+
+export interface HotelImage {
+  imageId: number;
+  imageUrl: string;
+  hotel: Hotel;
 }

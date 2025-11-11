@@ -1,5 +1,6 @@
 import { LoginRequest, RegisterRequest } from "@/interfaces/auth.interface";
 import axiosInstance from "@/utils/axiosInstance";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const register = async (request: RegisterRequest) => {
   try {
@@ -14,11 +15,28 @@ export const register = async (request: RegisterRequest) => {
   }
 };
 
-export const login = async (request: LoginRequest) => {
+export const loginAPI = async (request: LoginRequest) => {
   try {
     const response = await axiosInstance.post("/auth/login", request);
     return response.data;
   } catch (error: any) {
     throw error.response?.data || { message: "Sai email hoặc mật khẩu" };
   }
+};
+
+export const getAllUser = async () => {
+  const response = await axiosInstance.get("/auth");
+  return response.data;
+}
+
+export const getUserProfile = async () => {
+  const token = await AsyncStorage.getItem("ACCESS_TOKEN");
+  if (!token) throw new Error("Không tìm thấy token");
+
+  const res = await axiosInstance.get("/auth/me", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
 };

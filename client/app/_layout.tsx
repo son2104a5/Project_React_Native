@@ -11,6 +11,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "@/global.css";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { AuthProvider } from "@/context/AuthContext";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -21,7 +22,9 @@ export default function RootLayout() {
 
   return (
     <GluestackUIProvider mode="light">
-      <Slot />
+      <AuthProvider>
+        <Slot />
+      </AuthProvider>
     </GluestackUIProvider>
   );
 }

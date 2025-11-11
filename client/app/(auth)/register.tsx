@@ -97,7 +97,7 @@ export default function Register() {
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="px-6">
           <View className="mt-6">
             <Image
-              source={require('../../assets/images/logo.png')}
+              source={require('../../assets/images/logo1.png')}
               className="w-48 h-32"
             />
           </View>

@@ -31,12 +31,15 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     // ✅ Bỏ qua swagger và auth endpoints
     private final List<String> skipPaths = List.of(
             "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/swagger-ui/index.html",
             "/v3/api-docs/**",
             "/v3/api-docs.yaml",
-            "/swagger-ui.html",
             "/swagger-resources/**",
+            "/swagger-resources/configuration/**",
             "/configuration/**",
             "/webjars/**",
+            "/favicon.ico",
             "/api/v1/auth/**",
             "/login/**",
             "/error"

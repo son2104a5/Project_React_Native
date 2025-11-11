@@ -13,11 +13,11 @@ import {
 import { Link, router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { LoginRequest } from '@/interfaces/auth.interface';
-import { login } from '@/apis/auth.api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Login() {
+  const { login } = useAuth();
+
   const [email, setEmail] = useState('');
   const [isEmailFocused, setIsEmailFocused] = useState(false);
 
@@ -35,20 +35,11 @@ export default function Login() {
   const [loginError, setLoginError] = useState('');
 
   const handleLogin = async () => {
-    setLoginError('');
     try {
-      const newRequest: LoginRequest = { email, password };
-      const res = await login(newRequest);
-
-      // Lưu token
-      await AsyncStorage.multiSet([
-        ['ACCESS_TOKEN', res.data.accessToken],
-        ['REFRESH_TOKEN', res.data.refreshToken],
-      ]);
-
+      await login(email, password);
       router.replace("/(tabs)");
     } catch (error: any) {
-      setLoginError(error.message || "Sai email hoặc mật khẩu");
+      setLoginError(error?.message || "Sai email hoặc mật khẩu");
     }
   };
 
@@ -67,7 +58,7 @@ export default function Login() {
           {/* Logo */}
           <View className="mt-6">
             <Image
-              source={require('../../assets/images/logo.png')}
+              source={require('../../assets/images/logo1.png')}
               className="w-48 h-32"
             />
           </View>
@@ -182,8 +173,10 @@ export default function Login() {
                 color="#9CA3AF"
               />
             </Pressable>
+            <View className='items-end'>
+              <Text className='text-[#6783ff] mt-3'>Forgot Password?</Text>
+            </View>
           </View>
-          <Text className='text=[#6783ff] items-end'>Forgot Password</Text>
           {/* Hiển thị lỗi login */}
           {loginError ? (
             <View className="mb-4 p-3 bg-red-100 rounded-lg">

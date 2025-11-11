@@ -34,20 +34,23 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    // jwt
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    // ✅ JWT mới, tương thích JDK 17
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
     // jbcrypt
     implementation 'org.mindrot:jbcrypt:0.4'
-    // JAXB
-    implementation 'javax.xml.bind:jaxb-api:2.3.1'
-    implementation 'com.sun.xml.bind:jaxb-impl:2.3.1'
-    implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
-    // cloudinary
-    implementation("com.cloudinary:cloudinary-core:1.38.0")
+
+    // Cloudinary
+    implementation 'com.cloudinary:cloudinary-core:1.38.0'
     implementation 'com.cloudinary:cloudinary-http44:1.32.2'
-    // swagger-ui
+
+    // Swagger UI
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 }
+
 
 tasks.named('test') {
     useJUnitPlatform()

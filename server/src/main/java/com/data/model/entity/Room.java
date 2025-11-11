@@ -16,6 +16,7 @@ public class Room {
 
     private String roomNumber;
     private Integer floor;
+    private Double price;
 
     @ManyToOne
     @JoinColumn(name = "room_type_id")

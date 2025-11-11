@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +26,7 @@ public class Hotel {
     private String city;
     private String country;
 
-    private Integer starRating;
+    private Double starRating;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")

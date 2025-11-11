@@ -42,9 +42,15 @@ public class SecurityConfig {
                         // ✅ Swagger (phải đủ mấy cái path này)
                         .requestMatchers(
                                 "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/index.html",
                                 "/v3/api-docs/**",
                                 "/v3/api-docs.yaml",
-                                "/swagger-ui.html"
+                                "/swagger-resources/**",
+                                "/swagger-resources/configuration/**",
+                                "/webjars/**",
+                                "/configuration/**",
+                                "/favicon.ico"
                         ).permitAll()
 
                         // ✅ Auth endpoints public

@@ -9,7 +9,9 @@
       "tailwind.config": [
         "./tailwind.config.js"
       ]
-    }
+    },
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "**/*.ts",

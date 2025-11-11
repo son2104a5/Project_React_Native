@@ -7,11 +7,12 @@ import com.data.model.dto.res.JWTResponse;
 import com.data.model.entity.User;
 import com.data.model.enums.UserRole;
 import com.data.model.enums.UserStatus;
-import com.data.repository.RoleRepository;
-import com.data.repository.UserRepository;
+import com.data.repository.IRoleRepository;
+import com.data.repository.IUserRepository;
 import com.data.security.jwt.JwtUtils;
 import com.data.security.principle.CustomUserDetails;
-import com.data.service.AuthService;
+import com.data.service.IAuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,15 +26,16 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService {
-    private final UserRepository userRepository;
+public class AuthServiceImpl implements IAuthService {
+    private final IUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
+    private final IRoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 //    private final JavaMailSender mailSender;
@@ -127,7 +129,8 @@ public class AuthServiceImpl implements AuthService {
                     .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().getRoleName())))
                     .build();
 
-            String token = jwtUtils.generateToken(userDetails.getUsername());
+            String accessToken = jwtUtils.generateToken(userDetails.getUsername());
+            String refreshToken = jwtUtils.refreshToken(accessToken, userDetails.getUsername());
 
             return JWTResponse.builder()
                     .fullName(userDetails.getFullName())
@@ -135,7 +138,8 @@ public class AuthServiceImpl implements AuthService {
                     .phone(userDetails.getPhone())
                     .enabled(userDetails.isEnabled())
                     .authorities(userDetails.getAuthorities())
-                    .accessToken(token)
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
                     .build();
         } catch (BadCredentialsException e) {
             log.error("Sai email hoặc mật khẩu: {}", loginRequestDTO.getEmail(), e);
@@ -144,6 +148,23 @@ public class AuthServiceImpl implements AuthService {
             log.error("Lỗi trong quá trình đăng nhập: {}", e.getMessage(), e);
             throw new RuntimeException("Lỗi đăng nhập: " + e.getMessage());
         }
+    }
+
+    @Override
+    public List<User> getUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User getCurrentUser(HttpServletRequest request) {
+        String token = jwtUtils.getJwtFromRequest(request);
+        if (token == null || !jwtUtils.validateToken(token)) {
+            throw new RuntimeException("Token không hợp lệ hoặc đã hết hạn");
+        }
+
+        String email = jwtUtils.getUsernameFromJwt(token);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
     }
 //
 //    @Override

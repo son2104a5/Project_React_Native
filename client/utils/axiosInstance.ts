@@ -2,7 +2,8 @@ import axios from "axios";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const BASE_URL = "http://192.168.1.226:8080/api/v1";
+// const BASE_URL = "http://192.168.1.226:8080/api/v1";
+const BASE_URL = "http://192.168.36.102:8080/api/v1";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
